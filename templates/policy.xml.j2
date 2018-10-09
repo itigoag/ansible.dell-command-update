@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-16"?>
+<dellcommandupdate version="1.0" doctype="settings">
+{% for key, value in dell_command_update_settings.items() %}
+    <setting name="{{ key }}">{{ value }}</setting>
+{% endfor %}
+</dellcommandupdate>

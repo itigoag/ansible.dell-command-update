@@ -1,2 +1,24 @@
 ---
 # defaults file for itigoag.dell-command-update
+
+dell_command_update_ressourcen_name: "{{ source_of_supply_name | default('Support') }}"
+dell_command_update_root_directory: "{{ ansible_env.SystemDrive }}\\{{ dell_command_update_ressourcen_name }}"
+dell_command_update_install: true
+
+dell_command_update_settings:
+  automationmode: ScanDownloadApplyNotify
+  scheduledexecution: "On"
+  randomizetime: False
+  scheduledfrequency: "Monthly"
+  scheduledhour: 12
+  expanddevicecategory: True
+  scheduledminute: 0
+  expandupdatetype: True
+  filterapplicable: "ShowOnlyForSystemConfig"
+  systemrestorepointname: "Dell-Aktualisierungen"
+  windowstate: "Normal"
+  chainedupdatecounter: 1
+  showsetuppopup: False
+  filterupdatetype_utility: False
+  scheduleddays: 1
+  expandcriticality: True

@@ -1,2 +1,45 @@
 ---
 # tasks file for itigoag.dell-command-update
+
+- name: gather facts from chocolatey
+  win_chocolatey_facts:
+  when: ansible_chocolatey is undefined
+  tags:
+    - configuration
+    - packages
+
+- block:
+
+    - name: install Dell Command | Update
+      win_chocolatey:
+        name: dellcommandupdate
+      when: >
+        not (ansible_chocolatey.packages | json_query("[?package=='dellcommandupdate']"))
+      tags:
+        - packages
+
+    - name: Remove directory structure
+      win_file:
+        path: "{{ ansible_env.SystemDrive }}\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Dell"
+        state: absent
+
+    - name: create policy.xml file
+      win_template:
+        src: policy.xml.j2
+        dest: "{{ dell_command_update_root_directory }}\\xml.d\\dcu-policy.xml"
+        newline_sequence: "\r\n"
+      register: register_create_policy
+      tags:
+        - configuration
+
+    - name: import policy
+      win_dellcommand_update:
+        state: import
+        policy: "{{ dell_command_update_root_directory }}\\xml.d\\dcu-policy.xml"
+      when: register_create_policy.changed 
+      tags:
+        - configuration
+
+  when: >
+    dell_command_update_install and (chocolatey_packages is undefined or chocolatey_packages['dellcommandupdate'] is defined) and ansible_system_vendor == "Dell Inc." or
+    chocolatey_packages is defined and chocolatey_packages['dellcommandupdate'] is defined and ansible_system_vendor == "Dell Inc."
