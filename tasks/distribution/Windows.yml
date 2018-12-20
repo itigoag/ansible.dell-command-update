@@ -41,5 +41,5 @@
         - configuration
 
   when: >
-    dell_command_update_install and (chocolatey_packages is undefined or chocolatey_packages['dellcommandupdate'] is defined) and ansible_system_vendor == "Dell Inc." or
-    chocolatey_packages is defined and chocolatey_packages['dellcommandupdate'] is defined and ansible_system_vendor == "Dell Inc."
+    dell_command_update_install and (packages is undefined or packages['dellcommandupdate'] is defined) and ansible_system_vendor == "Dell Inc." or
+    packages is defined and packages['dellcommandupdate'] is defined and ansible_system_vendor == "Dell Inc."
